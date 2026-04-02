@@ -3,26 +3,32 @@ package org.example;
 import java.util.Scanner;
 
 public class Main {
-
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
 
-        // 1) The user should be asked if it is a 2 player OR 1 player game (versus Intelligent AI)
-        System.out.println("Select game mode:");
-        System.out.println("1 - 2 Players");
-        System.out.println("2 - 1 Player (vs AI)");
-        int mode = getInput("Enter mode: ", 1, 2);
+        while (true) {
+            // 1) The user should be asked if it is a 2 player OR 1 player game (versus Intelligent AI)
+            System.out.println("\nSelect game mode:");
+            System.out.println("1 - 2 Players");
+            System.out.println("2 - 1 Player (vs AI)");
+            System.out.println("3 - Exit");
+            int mode = getInput("Enter mode: ", 1, 3);
 
-        Board board = new Board();
-        GameLogic logic = new GameLogic(board);
+            if (mode == 3) {
+                System.out.println("Goodbye!");
+                break;
+            }
 
-        if (mode == 1) {
-            twoPlayerGame(board, logic);
-        } else {
-            onePlayerGame(board, logic);
+            Board board = new Board();
+            GameLogic logic = new GameLogic(board);
+
+            if (mode == 1) {
+                twoPlayerGame(board, logic);
+            } else {
+                onePlayerGame(board, logic);
+            }
         }
-
         scanner.close();
     }
 
@@ -50,7 +56,7 @@ public class Main {
                 : new Player[]{player2, player1};
 
         // b. An empty board will then be displayed. displayBoard()
-        System.out.println("\nStarting game! Here is the empty board:");
+        System.out.println("\nAre u ready? Starting game! \n");
         board.displayBoard();
 
         int currentIndex = 0;
@@ -93,21 +99,102 @@ public class Main {
                 break;
             }
 
-            // if not in a winning state or draw, go to step c
+            // If not in a winning state or draw, go to step c
             currentIndex = (currentIndex == 0) ? 1 : 0;
         }
 
         // At the end of a game, the result should be displayed.
+        System.out.println("\nPlay again?");
+        System.out.println("1 - Yes");
+        System.out.println("2 - Back to menu");
+        int choice = getInput("Enter choice: ", 1, 2);
+
+        if (choice == 1) {
+            board.resetBoard();
+            twoPlayerGame(board, logic);
+        }
     }
 
     // 2) If the user selects 1 player (versus minimax AI)
     static void onePlayerGame(Board board, GameLogic logic) {
-        // implement human vs AI game
-        System.out.println("Coming soon!");
+        // Human vs AI game
+        // a. The human player should be asked their name
+        System.out.print("Enter your name: ");
+        String humanName = scanner.nextLine();
+
+        // b. The player must be prompted to choose their symbol ('X' or 'O')
+        char humanSymbol = getSymbol(humanName);
+        char aiSymbol = (humanSymbol == 'X') ? 'O' : 'X';
+        System.out.println("Computer's symbol is: " + aiSymbol);
+
+        Player human = new Player(humanName, humanSymbol);
+        AI ai = new AI(aiSymbol, humanSymbol);
+
+        // c. The player with symbol 'X' goes first (computer or human)
+        boolean isHumanTurn = (humanSymbol == 'X');
+
+        // b. Display empty board
+        System.out.println("\nAre you ready? Starting game! \n");
+        board.displayBoard();
+
+        while (true) {
+            // d. Check whose turn it is
+            if (isHumanTurn) {
+                // d.2 If it is the player's turn, prompt for row and column
+                System.out.println("\n" + human.getName() + "'s turn (" + human.getSymbol() + ")");
+                int row = getInput("Enter row (0-2): ", 0, 2);
+                int col = getInput("Enter column (0-2): ", 0, 2);
+
+                while (!board.isCellEmpty(row, col)) {
+                    System.out.println("That cell is already taken! Try again.");
+                    row = getInput("Enter row (0-2): ", 0, 2);
+                    col = getInput("Enter column (0-2): ", 0, 2);
+                }
+
+                board.setUserChoice(row, col, human.getSymbol());
+            } else {
+                // d.1 If the computer is to play, show the board updated with computer's symbol
+                System.out.println("\nComputer's turn (" + aiSymbol + ")");
+                int[] bestMove = ai.getBestMove(board, logic);
+                board.setUserChoice(bestMove[0], bestMove[1], aiSymbol);
+            }
+
+            board.displayBoard();
+
+            // e. Check for winning state or draw
+            char winner = logic.checkWinner();
+            if (winner != ' ') {
+                if (winner == humanSymbol) {
+                    System.out.println("\n" + human.getName() + " (" + winner + ") wins!");
+                } else {
+                    System.out.println("\nComputer (" + winner + ") wins!");
+                }
+                break;
+            }
+
+            if (logic.checkDraw()) {
+                System.out.println("\nIt's a draw!");
+                break;
+            }
+
+            // Switch turns
+            isHumanTurn = !isHumanTurn;
+        }
+
+        // At the end of a game, the result should be displayed.
+        System.out.println("\nPlay again?");
+        System.out.println("1 - Yes");
+        System.out.println("2 - Back to menu");
+        int choice = getInput("Enter choice: ", 1, 2);
+
+        if (choice == 1) {
+            board.resetBoard();
+            onePlayerGame(board, logic);
+        }
     }
 
-    // ─── Input helpers ────────────────────────────────────────────────────────
 
+    // -------> Input helpers:
     static char getSymbol(String playerName) {
         while (true) {
             System.out.print(playerName + ", choose your symbol (X or O): ");
