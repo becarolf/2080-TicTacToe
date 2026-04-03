@@ -78,7 +78,7 @@ public class Main {
 
             // d. The present board state will be displayed showing their updated play.
             //    setUserChoice(row, col, symbol) - board[row][col] = symbol
-            //    displayBoard() -- loop dentro de um loop pq tem que imprimir 9x (row & col)
+            //    displayBoard() -- loop inside of a loop bc it needs to print 9x (row & col)
             board.setUserChoice(row, col, current.getSymbol());
             board.displayBoard();
 
@@ -177,7 +177,7 @@ public class Main {
                 break;
             }
 
-            // Switch turns
+            // switch turns
             isHumanTurn = !isHumanTurn;
         }
 
