@@ -9,11 +9,11 @@ public class Main {
 
         while (true) {
             // 1) The user should be asked if it is a 2 player OR 1 player game (versus Intelligent AI)
-            System.out.println("\nSelect game mode:");
-            System.out.println("1 - 2 Players");
-            System.out.println("2 - 1 Player (vs AI)");
+            System.out.println("\nCHOOSE GAME MODE:");
+            System.out.println("1 - Two Players");
+            System.out.println("2 - Player vs AI");
             System.out.println("3 - Exit");
-            int mode = getInput("Enter mode: ", 1, 3);
+            int mode = getInput("Please, enter your choice: ", 1, 3);
 
             if (mode == 3) {
                 System.out.println("Goodbye!");
@@ -56,7 +56,7 @@ public class Main {
                 : new Player[]{player2, player1};
 
         // b. An empty board will then be displayed. displayBoard()
-        System.out.println("\nAre u ready? Starting game! \n");
+        System.out.println("\nARE YOU READY? STARTING THE GAME! \n");
         board.displayBoard();
 
         int currentIndex = 0;
@@ -71,7 +71,7 @@ public class Main {
             int col = getInput("Enter column (0-2): ", 0, 2);
 
             while (!board.isCellEmpty(row, col)) {
-                System.out.println("That cell is already taken! Try again.");
+                System.out.println("OOPS! That cell is already taken! Please try again.");
                 row = getInput("Enter row (0-2): ", 0, 2);
                 col = getInput("Enter column (0-2): ", 0, 2);
             }
@@ -104,7 +104,7 @@ public class Main {
         }
 
         // At the end of a game, the result should be displayed.
-        System.out.println("\nPlay again?");
+        System.out.println("\nDo you want to play again?");
         System.out.println("1 - Yes");
         System.out.println("2 - Back to menu");
         int choice = getInput("Enter choice: ", 1, 2);
@@ -134,7 +134,7 @@ public class Main {
         boolean isHumanTurn = (humanSymbol == 'X');
 
         // b. Display empty board
-        System.out.println("\nAre you ready? Starting game! \n");
+        System.out.println("\nARE YOU READY? STARTING GAME! \n");
         board.displayBoard();
 
         while (true) {
@@ -182,7 +182,7 @@ public class Main {
         }
 
         // At the end of a game, the result should be displayed.
-        System.out.println("\nPlay again?");
+        System.out.println("\nDo you want to play again?");
         System.out.println("1 - Yes");
         System.out.println("2 - Back to menu");
         int choice = getInput("Enter choice: ", 1, 2);
