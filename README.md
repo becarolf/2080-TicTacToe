@@ -20,13 +20,12 @@ Run `Main.java` and choose your game mode:
 
 ### The board looks like this:
 ```
--------------
-|   |   |   |   row 0
--------------
-|   |   |   |   row 1
--------------
-|   |   |   |   row 2
--------------
+|   |   |      row 0
+------------
+|   |   |     row 1
+------------
+|   |   |     row 2
+
  col 0  1  2
 ```
 
